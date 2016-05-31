@@ -1,9 +1,17 @@
 using Microsoft.Win32;
 using System;
+using System.Runtime.InteropServices;
 namespace MangaLauncher
 {
     static class MangaLauncher
     {
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+
         [STAThread]
         static void Main()
         {
@@ -17,7 +25,9 @@ namespace MangaLauncher
                 mangaLounch.StartInfo.Arguments = " -jar " + mgaFile;
                 try
                 {
-                    mangaLounch.Start();
+                    new System.Threading.Tasks.Task(() => {mangaLounch.Start();}).Start();
+                    return;
+                   
                 }
                 catch (Exception ec)
                 {
