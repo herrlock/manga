@@ -1,16 +1,33 @@
-using System.Diagnostics;
-
-namespace MD
+using Microsoft.Win32;
+using System;
+namespace Tasks_Playground
 {
-	class Run
-	{
-		static void Main()
-		{
-            ProcessStartInfo startInfo = new ProcessStartInfo("cmd.exe", "/C java -jar MangaLauncher.jar");
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            Process process = new Process();
-            process.StartInfo = startInfo;
-            process.Start();
-		}
-	}
+    static class MangaLauncher
+    {
+        [STAThread]
+        static void Main()
+        {
+            string mgaFile = "MangaLauncher.jar";
+            string currentJavaVersion = Registry.LocalMachine.OpenSubKey("SOFTWARE\\JavaSoft\\Java Runtime Environment").GetValue("CurrentVersion").ToString();
+            if (System.IO.File.Exists(mgaFile))
+            {
+                System.Diagnostics.Process mangaLounch = new System.Diagnostics.Process();
+                mangaLounch.StartInfo.UseShellExecute = false;
+                mangaLounch.StartInfo.FileName = "java";
+                mangaLounch.StartInfo.Arguments = " -jar " + mgaFile;
+                try
+                {
+                    mangaLounch.Start();
+                }
+                catch (Exception ec)
+                {
+                    System.Windows.Forms.MessageBox.Show("Application can not runn on Java " + currentJavaVersion + "!", "Application can not runn, maybe java is not installed.");
+                }
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("MangaLauncher not found.", "Application can not runn, maybe the java pack is not in current directory.");
+            }
+        }
+    }
 }
