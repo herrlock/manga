@@ -1,6 +1,6 @@
 using Microsoft.Win32;
 using System;
-namespace Tasks_Playground
+namespace MangaLauncher
 {
     static class MangaLauncher
     {
